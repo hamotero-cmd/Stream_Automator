@@ -1,31 +1,25 @@
 name: Actualizar Lista IPTV
+
 on:
-  schedule:
-    - cron: '0 8 * * *' # Esto significa: Ejecutar todos los días a las 08:00
-  workflow_dispatch: # Esto permite que le des a un botón para ejecutarlo cuando quieras
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Esto permite el botón "Run workflow" manualmente
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar código
-        uses: actions/checkout@v3
-
-      - name: Instalar Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
-
-      - name: Instalar librerías
+          python-version: '3.10'
+          
+      - name: Instalar dependencias
         run: pip install -r requirements.txt
-
-      - name: Ejecutar el script
+        
+      - name: Ejecutar script
+        env:
+          PAIS_FILTRO: "Spain"
         run: python src/smart_manager.py
-
-      - name: Guardar cambios
-        run: |
-          git config --global user.name "Robot"
-          git config --global user.email "robot@email.com"
-          git add output/lista_inteligente.m3u
-          git commit -m "Actualización automática de canales"
-          git push
