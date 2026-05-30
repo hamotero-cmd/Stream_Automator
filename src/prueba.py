@@ -1,0 +1,1 @@
+echo print("Hola, el sistema funciona") > src\prueba.py
